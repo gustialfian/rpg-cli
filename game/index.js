@@ -8,6 +8,7 @@ const {
   generateBattle,
   calcBattle,
   getPlayerIndexByName,
+  history,
 } = require('./battle')
 console.log("hello rpg")
 
@@ -64,7 +65,8 @@ function gameLoop() {
   const turn2 = calcBattle(turn1, [turn1Jowy, turn1Slime, turn1Dummy])
   const turn3 = calcBattle(turn2, [turn1Jowy, turn1Slime, turn1Dummy])
 
-  console.log(`last history:`, turn3)
+  // console.log(`logs:`, history[0].players[])
+  console.log(`logs:`, jowy)
 }
 
 gameLoop()

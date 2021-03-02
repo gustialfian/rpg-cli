@@ -7,7 +7,7 @@
 		"node": ">=10"
 	},
 	"scripts": {
-		"start": "node cli/index.js",
+		"cli": "node cli/index.js",
 		"dev": "nodemon cli/index.js",
 		"game": "nodemon game/index.js",
 		"test": "jest"

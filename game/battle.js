@@ -12,11 +12,13 @@ const battle = {
 const history = []
 
 function generateBattle(players, goal) {
-  return {
+  const initBattle = {
     ...battle,
     players,
     goal,
   }
+  history.push(initBattle)
+  return initBattle
 }
 
 function calcBattle(battle, commands) {
