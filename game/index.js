@@ -66,7 +66,7 @@ function gameLoop() {
   const turn3 = calcBattle(turn2, [turn1Jowy, turn1Slime, turn1Dummy])
 
   // console.log(`logs:`, history[0].players[])
-  console.log(`logs:`, jowy)
+  console.log(`logs:`, slime, dummy)
 }
 
 gameLoop()

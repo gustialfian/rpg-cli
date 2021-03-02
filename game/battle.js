@@ -33,8 +33,22 @@ function calcBattle(battle, commands) {
   return winChecked
 }
 
+function checkStatus(battle) {
+  const status = battle.players
+    .filter(v => v.hp <= 0)
+    .reduce((acc, cur) => {
+      return {
+        ...acc,
+        [cur.name]: 'dead'
+      }
+    }, {})
+
+  return produce(battle, draft => {
+    draft.status = status
+  })
+}
+
 function parseCommand(battle, command) {
-  
   switch (command.action) {
     case 'attack':
       return attack(battle, command)
@@ -80,6 +94,15 @@ function attack(battle, command) {
   })
 }
 
+function wait(battle, command) {
+  const actor = battle.players[command.actor]
+  const logs = [...battle.logs]
+  logs.push(`${actor.name} waiting`)
+  return produce(battle, draft => {
+    draft.logs = logs
+  })
+}
+
 function checkWin(battle) {
   switch (battle.goal.name) {
     case 'kill':
@@ -94,25 +117,12 @@ function killGoal(battle) {
   const isDead = battle.status[battle.goal.target] == 'dead'
 
   const logs = [...battle.logs]
-  logs.push(`Win`)
+  if (isDead) {
+    logs.push(`Win`)
+  }
   return produce(battle, draft => {
     draft.logs = logs
     draft.goal.isDone = isDead
-  })
-}
-
-function checkStatus(battle) {
-  const status = battle.players
-    .filter(v => v.hp <= 0)
-    .reduce((acc, cur) => {
-      return {
-        ...acc,
-        [cur.name]: 'dead'
-      }
-    }, {})
-  
-  return produce(battle, draft => {
-    draft.status = status
   })
 }
 

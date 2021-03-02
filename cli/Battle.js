@@ -8,18 +8,16 @@ const { calcBattle, getPlayerIndexByName } = require('../game/battle')
 const importJsx = require('import-jsx')
 const TextInput = importJsx('ink-text-input').default
 
-const baseCommand = {
-  action: '',
-  actor: -1,
-  target: -1,
-}
+/**
+ * extrack logic to custom hooks 
+ */
 
 function Battle(params) {
   const [battle, setBattle] = useState(initBattle)
 
+  const [profile, setProfile] = useState(0)
   const [mode, setMode] = useState('action')
   const [input, setInput] = useState('')
-  const [command, setCommand] = useState(baseCommand)
 
 
   const slimeCommand = {
@@ -32,28 +30,25 @@ function Battle(params) {
     actor: getPlayerIndexByName(initBattle, 'dummy'),
     target: getPlayerIndexByName(initBattle, 'dummy'),
   }
-  console.log(`hai`, [command, slimeCommand, dummyCommand])
 
-  const handleSubmit = (val) => {
-    if (mode == 'action' && val == 'a') {
-      setMode('attack')
-      setCommand({ ...command, action: 'attack' })
+  const handleSubmit = (input) => {
+    setMode(getActionFromMode(mode, input))
+
+    if (mode != 'action') {
+      const { nextBattle, nextNode, nextProfile } = sendCommand({
+        battle, mode, input,
+        commands: [slimeCommand, dummyCommand]
+      })
+      setMode(nextNode)
+      setBattle(nextBattle)
+      setProfile(nextProfile)
     }
-    if (mode == 'action' && val == 'w') {
-      setMode('wait')
-      setCommand({ ...command, action: 'wait' })
-    }
-    if (mode == 'attack') {
-      setMode('action')
-      setCommand({ ...command, actor: 0, target: val })
-      setBattle(calcBattle(battle, [command, slimeCommand, dummyCommand]))
-    }
-    if (mode == 'wait') {
-      setMode('action')
-      setCommand({ ...command, actor: 0, target: 0 })
-      setBattle(calcBattle(battle, [command, slimeCommand, dummyCommand]))
-    }
+
     setInput('')
+  }
+
+  if (isNaN(profile)) {
+    setProfile(0)
   }
 
   return (
@@ -63,7 +58,7 @@ function Battle(params) {
       </Box>
       <Box minHeight={10}>
         <Box borderStyle={"round"} width={50}>
-          <Profile player={battle.players[0]} />
+          <Profile player={battle.players[profile]} />
         </Box>
 
         <Box borderStyle={"round"} width={30}>
@@ -76,10 +71,18 @@ function Battle(params) {
 
       <Box borderStyle={"round"} width={80}>
         <Text>
-          {/* <Logs logs={initBattle.logs} /> */}
-          <Menu mode={mode} /><Newline />
-          <Text>$ </Text>
-          <TextInput value={input} onChange={setInput} onSubmit={handleSubmit} />
+          {battle.goal.isDone ? <Menu mode={'wining'} /> : <Menu mode={mode} />}
+          <Newline />
+
+          {mode == 'goal' && <Text>{battle.goal.name} {battle.goal.target} [ENTER]</Text>}
+          {mode == 'logs' && <Logs data={battle.logs} />}
+          <Newline />
+
+          {!battle.goal.isDone &&
+            <Text>
+              $ <TextInput value={input} onChange={setInput} onSubmit={handleSubmit} />
+            </Text>}
+
         </Text>
       </Box>
     </Box>
@@ -113,24 +116,8 @@ function ListPlayer({ players }) {
   ))
 }
 
-function Menu({ mode }) {
-  if (mode == 'action') {
-    return <Text>(a)ttack, (w)ait</Text>
-  }
-
-  if (mode == 'attack') {
-    return <Text>Attacking pick target (index)</Text>
-  }
-
-  if (mode == 'wait') {
-    return <Text>waiting...</Text>
-  }
-
-  return <Text>Unknown</Text>
-}
-
-function Logs({ logs }) {
-  return logs.map((v, i) => (
+function Logs({ data }) {
+  return data.map((v, i) => (
     <Text key={i}>
       <Text>{v}</Text>
       <Newline />
@@ -138,8 +125,73 @@ function Logs({ logs }) {
   ))
 }
 
-function sendCommand(commands) {
-  console.log(`sendCommand...`)
+function Menu({ mode }) {
+  if (mode == 'action') {
+    return <Text>(a)ttack, (w)ait, (g)oal, (p)rofile, (l)ogs</Text>
+  }
+  if (mode == 'attack') {
+    return <Text>Attacking pick target (index)</Text>
+  }
+  if (mode == 'profile') {
+    return <Text>Pick character (index)</Text>
+  }
+  if (mode == 'wait') {
+    return <Text>waiting...</Text>
+  }
+  if (mode == 'wining') {
+    return <Text>Wining...</Text>
+  }
+  if (mode == 'losing') {
+    return <Text>Losing...</Text>
+  }
+  if (mode == 'goal') {
+    return <Text>Goal: </Text>
+  }
+  if (mode == 'logs') {
+    return <Text>Logs: </Text>
+  }
+  return <Text>Unknown</Text>
+}
+
+function getActionFromMode(mode, input) {
+  if (mode == 'action' && input == 'a') {
+    return 'attack'
+  }
+  if (mode == 'action' && input == 'w') {
+    return 'wait'
+  }
+  if (mode == 'action' && input == 'g') {
+    return 'goal'
+  }
+  if (mode == 'action' && input == 'p') {
+    return 'profile'
+  }
+  if (mode == 'action' && input == 'l') {
+    return 'logs'
+  }
+  return mode
+}
+
+function sendCommand({ battle, mode, input, commands }) {
+  if (mode == 'attack') {
+    const command = { action: 'attack', actor: 0, target: parseInt(input) }
+    const nextBattle = calcBattle(battle, [command, ...commands])
+    return { nextNode: 'action', nextBattle }
+  }
+  if (mode == 'wait') {
+    const command = { action: 'wait', actor: 0, target: 0 }
+    const nextBattle = calcBattle(battle, [command, ...commands])
+    return { nextNode: 'action', nextBattle }
+  }
+
+  if (mode == 'goal' || mode == 'logs') {
+    return { nextNode: 'action', nextBattle: battle }
+  }
+  if (mode == 'profile') {
+    return { nextNode: 'action', nextBattle: battle, nextProfile: input }
+  }
+
+  return { nextNode: mode, nextBattle: battle }
 }
 
 module.exports = Battle

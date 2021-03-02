@@ -42,8 +42,12 @@ module.exports = {
         int: 5,
         wis: 5,
         cha: 5,
-        equipment: [Object],
-        power: [Object],
+        equipment: {
+          armor: { melle: 0, range: 0, armor: 2, modifiers: [], name: 'slime' },
+          left: { melle: 0, range: 0, armor: 0, modifiers: [] },
+          right: { melle: 2, range: 0, armor: 0, modifiers: [], name: 'Slamer' }
+        },
+        power: { armor: 2, melle: 2, range: 0 },
         name: 'slime'
       },
       {
@@ -55,9 +59,13 @@ module.exports = {
         dex: 5,
         int: 5,
         wis: 5,
-        cha: 5,
-        equipment: [Object],
-        power: [Object],
+        cha: 5, 
+        equipment: {
+          armor: { melle: 0, range: 0, armor: 0, modifiers: [] },
+          left: { melle: 0, range: 0, armor: 0, modifiers: [] },
+          right: { melle: 0, range: 0, armor: 0, modifiers: [] }
+        },
+        power: { armor: 0, melle: 0, range: 0 },
         name: 'dummy'
       }
     ],
