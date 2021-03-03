@@ -48,17 +48,6 @@ function checkStatus(battle) {
   })
 }
 
-function parseCommand(battle, command) {
-  switch (command.action) {
-    case 'attack':
-      return attack(battle, command)
-    case 'wait':
-      return wait(battle, command)
-    default:
-      return 'unknown command'
-  }
-}
-
 function takeTurn(battle) {
   return {
     ...battle,
@@ -72,7 +61,44 @@ function getPlayerIndexByName(battle, name) {
   return battle.players.findIndex(v => v.name == name)
 }
 
-// action
+// TODO: pindah ke file goal.js
+// Goal
+function checkWin(battle) {
+  switch (battle.goal.name) {
+    case 'kill':
+      return killGoal(battle)
+
+    default:
+      break;
+  }
+}
+
+function killGoal(battle) {
+  const isDead = battle.status[battle.goal.target] == 'dead'
+
+  const logs = [...battle.logs]
+  if (isDead) {
+    logs.push(`Win`)
+  }
+  return produce(battle, draft => {
+    draft.logs = logs
+    draft.goal.isDone = isDead
+  })
+}
+
+// TODO: pindah ke file action.js
+// Action
+function parseCommand(battle, command) {
+  switch (command.action) {
+    case 'attack':
+      return attack(battle, command)
+    case 'wait':
+      return wait(battle, command)
+    default:
+      return 'unknown command'
+  }
+}
+
 function attack(battle, command) {
   const commands = [...battle.commands]
   commands.push(command)
@@ -100,29 +126,6 @@ function wait(battle, command) {
   logs.push(`${actor.name} waiting`)
   return produce(battle, draft => {
     draft.logs = logs
-  })
-}
-
-function checkWin(battle) {
-  switch (battle.goal.name) {
-    case 'kill':
-      return killGoal(battle)
-
-    default:
-      break;
-  }
-}
-
-function killGoal(battle) {
-  const isDead = battle.status[battle.goal.target] == 'dead'
-
-  const logs = [...battle.logs]
-  if (isDead) {
-    logs.push(`Win`)
-  }
-  return produce(battle, draft => {
-    draft.logs = logs
-    draft.goal.isDone = isDead
   })
 }
 

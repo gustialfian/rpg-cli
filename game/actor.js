@@ -1,43 +1,4 @@
-/**
- * 
-const hero = {
-  name: 'hero'
-  hp: 10,
-  ac: 10,
-  dc: 10,
 
-  str: 10,
-  con: 10,
-  dex: 10,
-  int: 10,
-  wis: 10,
-  cha: 10,
-
-  equipment: {
-    left: {
-      ...item,
-      name: 'Short Sword',
-      melle: 6,
-    },
-    right: {
-      ...item,
-      name: 'shield',
-      melle: 6,
-      armor: 2,
-    },
-    armor: {
-      ...item,
-      name: 'light armor',
-      armor: 11,
-    },
-  },
-
-  // turunan equipment
-  power: {
-    melle: 0 // total melle or range
-  },
-}
- */
 const actor = {
   hp: 0,
   ac: 0,
@@ -52,20 +13,6 @@ const actor = {
 
   equipment: {},
   power: {}
-}
-
-const baseActor = {
-  ...actor,
-  hp: 10,
-  ac: 10,
-  dc: 10,
-
-  str: 10,
-  con: 10,
-  dex: 10,
-  int: 10,
-  wis: 10,
-  cha: 10,
 }
 
 const item = {
@@ -126,7 +73,6 @@ function generatePlayerActor({ baseActor, abilityScore, name }) {
 }
 
 function getStarterEquipment() {
-  // return list of starter equipment
   return {
     armor,
     weapon,
@@ -134,18 +80,11 @@ function getStarterEquipment() {
 }
 
 function pickEquipment(listEquipment, choosenEquipment) {
-  // console.log({
-  //   listEquipment,
-  //   choosenEquipment,
-  // })
-
   const equipment = {
     armor: listEquipment.armor[choosenEquipment.armor],
     left: listEquipment.weapon[choosenEquipment.left],
     right: listEquipment.weapon[choosenEquipment.right],
   }
-
-  // console.log(armor)
 
   return {
     ...actor,

@@ -1,6 +1,6 @@
 const React = require('react');
 const { useState } = require('react');
-const { Text, Box, Newline } = require('ink');
+const { Text, Box, Newline, Spacer } = require('ink');
 
 const { initBattle } = require('../game/sample-state')
 const { calcBattle, getPlayerIndexByName } = require('../game/battle')
@@ -69,21 +69,21 @@ function Battle(params) {
         </Box>
       </Box>
 
-      <Box borderStyle={"round"} width={80}>
+      <Box borderStyle={"round"} width={80} minHeight={5} flexDirection={"column"}>
         <Text>
           {battle.goal.isDone ? <Menu mode={'wining'} /> : <Menu mode={mode} />}
           <Newline />
 
-          {mode == 'goal' && <Text>{battle.goal.name} {battle.goal.target} [ENTER]</Text>}
+          {mode == 'goal' && <Text>{battle.goal.name} {battle.goal.target} [ENTER] </Text>}
           {mode == 'logs' && <Logs data={battle.logs} />}
-          <Newline />
-
-          {!battle.goal.isDone &&
-            <Text>
-              $ <TextInput value={input} onChange={setInput} onSubmit={handleSubmit} />
-            </Text>}
-
         </Text>
+
+        <Spacer />
+        {!battle.goal.isDone &&
+          <Text>
+            $ <TextInput value={input} onChange={setInput} onSubmit={handleSubmit} />
+          </Text>}
+
       </Box>
     </Box>
   )
