@@ -2,6 +2,7 @@ const item = {
   melle: 0,
   range: 0,
   armor: 0,
+  heal: 0,
   modifiers: [],
 }
 
@@ -46,3 +47,37 @@ const weapon = [
     name: 'shield',
   },
 ]
+
+const potions = [
+  {
+    ...item,
+    heal: 5,
+    name: 'small heal potion',
+    count: 0,
+  },
+]
+
+function addInventory(player, item) {
+  // check if exists
+  const itemName = player.item.map(v => v.name)
+  const isExists = itemName.includes(item.name)
+  const itemTotal = player.item
+    .filter(v => v == item.name)
+    .map(v => {
+      return {
+        ...v,
+        count: v.count + item.count,
+      }
+    })
+  
+  // sum the count
+  // or
+  // add new
+  
+}
+
+module.exports = {
+  armor,
+  weapon,
+  potions,
+}

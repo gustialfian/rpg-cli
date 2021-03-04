@@ -13,11 +13,31 @@ const {
   history,
 } = require('./battle')
 
+const { initBattle } = require('../test/sample-state')
+const { jowy } = require('./characters')
+
 
 console.log("hello rpg")
 
 
 function gameLoop() {
+  const goal = {
+    name: 'debug',
+  }
+  const initBattle = generateBattle([jowy], goal)
+  console.log(initBattle.players[0])
+  // const turn1Jowy = {
+  //   action: 'use',
+  //   actor: getPlayerIndexByName(initBattle, 'Jowy'),
+  //   item: 0,
+  //   target: getPlayerIndexByName(initBattle, 'Jowy'),
+  // }
+  // calcBattle()
+}
+
+gameLoop()
+
+function case0() {
   // character creation
   const name = 'Jowy'
   const hp = 10
@@ -38,6 +58,8 @@ function gameLoop() {
   }
   const baseActor = pickEquipment(starterEquipment, choosenEquipment)
   const jowy = generatePlayerActor({ baseActor, abilityScore, name })
+  // save({slime, dummy})
+
   // battle setup
   const players = []
   players.push(jowy)
@@ -66,12 +88,6 @@ function gameLoop() {
   }
 
   const turn1 = calcBattle(initBattle, [turn1Jowy, turn1Slime, turn1Dummy])
-  save(turn1)
   const turn2 = calcBattle(turn1, [turn1Jowy, turn1Slime, turn1Dummy])
   const turn3 = calcBattle(turn2, [turn1Jowy, turn1Slime, turn1Dummy])
-
-  // console.log(`logs:`, history[0].players[])
-  console.log(`logs:`)
 }
-
-gameLoop()

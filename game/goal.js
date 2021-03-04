@@ -6,7 +6,7 @@ function checkWin(battle) {
       return killGoal(battle)
 
     default:
-      break;
+      return battle
   }
 }
 

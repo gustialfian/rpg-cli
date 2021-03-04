@@ -6,6 +6,8 @@ function parseCommand(battle, command) {
       return attack(battle, command)
     case 'wait':
       return wait(battle, command)
+    case 'use':
+      return useItem(battle, command)
     default:
       return 'unknown command'
   }
@@ -40,6 +42,19 @@ function wait(battle, command) {
   return produce(battle, draft => {
     draft.logs = logs
   })
+}
+
+
+/**
+{
+  action: 'use',
+  actor: 0,
+  item: 0,
+  target: 0,
+}
+ */
+function useItem(battle, command) {
+  throw Error('not impl yoooooo')
 }
 
 module.exports = {

@@ -25,8 +25,7 @@ function generateBattle(players, goal) {
 
 function calcBattle(battle, commands) {
   const nextTurn = commands.reduce((acc, cur) => {
-    const sideEffect = parseCommand(acc, cur)
-    return sideEffect
+    return parseCommand(acc, cur)
   }, takeTurn(battle))
 
   const statusChecked = checkStatus(nextTurn)
@@ -35,6 +34,14 @@ function calcBattle(battle, commands) {
   return winChecked
 }
 
+/**
+ * check other player status
+ * - poison
+ * - stun
+ * - attack Up
+ * 
+ * move to status.js
+ */
 function checkStatus(battle) {
   const status = battle.players
     .filter(v => v.hp <= 0)
