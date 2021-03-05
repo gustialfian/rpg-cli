@@ -1,11 +1,8 @@
 const battle = require('../game/battle')
-const { jowy } = require('../game/characters')
-const { slime, dummy } = require('../game/enemy')
 
 const { initBattle, turn1 } = require('./sample-state')
 
 test('generate battle', () => {
-  const players = [jowy, slime, dummy]
   const goal = {
     name: 'kill',
     target: 'slime',

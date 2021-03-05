@@ -57,35 +57,23 @@ test('pick equipment', () => {
     left: 3,
     right: 1,
   }
-  const res = pickEquipment(starterEquipment, choosenEquipment)
+  const { equipment: res } = pickEquipment(starterEquipment, choosenEquipment)
   const exp = {
-    hp: 0,
-    ac: 0,
-    dc: 0,
-    str: 0,
-    con: 0,
-    dex: 0,
-    int: 0,
-    wis: 0,
-    cha: 0,
-    equipment: {
-      armor: {
-        melle: 0,
-        range: 0,
-        armor: 12,
-        modifiers: [],
-        name: 'medium armor'
-      },
-      left: { melle: 6, range: 0, armor: 2, modifiers: [], name: 'shield' },
-      right: {
-        melle: 6,
-        range: 0,
-        armor: 0,
-        modifiers: [],
-        name: 'Short Sword'
-      }
+    armor: {
+      melle: 0,
+      range: 0,
+      armor: 12,
+      modifiers: [],
+      name: 'medium armor'
     },
-    power: { armor: 14, melle: 12, range: 0 }
+    left: { melle: 6, range: 0, armor: 2, modifiers: [], name: 'shield' },
+    right: {
+      melle: 6,
+      range: 0,
+      armor: 0,
+      modifiers: [],
+      name: 'Short Sword'
+    }
   }
   expect(res).toStrictEqual(exp);
 });

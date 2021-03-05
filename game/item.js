@@ -4,6 +4,8 @@ const item = {
   armor: 0,
   heal: 0,
   modifiers: [],
+  addStatus: [],
+  removeStatus: [],
 }
 
 const armor = [
@@ -52,29 +54,24 @@ const potions = [
   {
     ...item,
     heal: 5,
-    name: 'small heal potion',
-    count: 0,
+    name: 'potion',
+  },
+  {
+    ...item,
+    addStatus: ['posion'],
+    name: 'posion',
+  },
+  {
+    ...item,
+    removeStatus:['posion'],
+    name: 'antidote',
+  },
+  {
+    ...item,
+    addStatus: ['haste'],
+    name: 'haste',
   },
 ]
-
-function addInventory(player, item) {
-  // check if exists
-  const itemName = player.item.map(v => v.name)
-  const isExists = itemName.includes(item.name)
-  const itemTotal = player.item
-    .filter(v => v == item.name)
-    .map(v => {
-      return {
-        ...v,
-        count: v.count + item.count,
-      }
-    })
-  
-  // sum the count
-  // or
-  // add new
-  
-}
 
 module.exports = {
   armor,

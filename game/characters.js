@@ -1,43 +1,32 @@
+const {
+  actor,
+  calcArmorFromEquipment,
+  calcMelleFromEquipment,
+  calcRangeFromEquipment
+} = require('./actor')
+const {
+  armor,
+  weapon,
+  potions
+} = require('./item')
 
 const jowy = {
-  "hp": 10,
-  "ac": 0,
-  "dc": 0,
-  "str": 10,
-  "con": 10,
-  "dex": 10,
-  "int": 10,
-  "wis": 10,
-  "cha": 10,
-  "equipment": {
-    "armor": {
-      "melle": 0,
-      "range": 0,
-      "armor": 12,
-      "modifiers": [],
-      "name": "medium armor"
-    },
-    "left": {
-      "melle": 6,
-      "range": 0,
-      "armor": 2,
-      "modifiers": [],
-      "name": "shield"
-    },
-    "right": {
-      "melle": 6,
-      "range": 0,
-      "armor": 0,
-      "modifiers": [],
-      "name": "Short Sword"
-    }
+  ...actor,
+  hp: 10,
+  maxHp: 10,
+  atk: 5,
+  equipment: {
+    armor: armor[1],
+    left: weapon[1],
+    right: weapon[3],
   },
-  "power": {
-    "armor": 14,
-    "melle": 12,
-    "range": 0
-  },
-  "name": "Jowy"
+  inventory: [
+    potions[0],
+    potions[0],
+    potions[1],
+    potions[2],
+  ],
+  name: "Jowy"
 }
 
 module.exports = {

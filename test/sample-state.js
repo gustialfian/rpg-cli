@@ -39,6 +39,59 @@ const initBattle = {
         "melle": 12,
         "range": 0
       },
+      "inventory": [
+        {
+          "melle": 0,
+          "range": 0,
+          "armor": 0,
+          "heal": 5,
+          "modifiers": [],
+          "status": {
+            "add": [],
+            "remove": []
+          },
+          "name": "small heal potion",
+          "count": 0
+        },
+        {
+          "melle": 0,
+          "range": 0,
+          "armor": 0,
+          "heal": 5,
+          "modifiers": [],
+          "status": {
+            "add": [],
+            "remove": []
+          },
+          "name": "small heal potion"
+        },
+        {
+          "melle": 0,
+          "range": 0,
+          "armor": 0,
+          "heal": 0,
+          "modifiers": [],
+          "status": {
+            "add": [
+              "posion"
+            ]
+          },
+          "name": "posion"
+        },
+        {
+          "melle": 0,
+          "range": 0,
+          "armor": 0,
+          "heal": 0,
+          "modifiers": [],
+          "status": {
+            "remove": [
+              "posion"
+            ]
+          },
+          "name": "antidote"
+        }
+      ],
       "name": "Jowy"
     },
     {
@@ -70,7 +123,7 @@ const initBattle = {
           "range": 0,
           "armor": 0,
           "modifiers": [],
-          "name": "Slamer"
+          "name": "slamer"
         }
       },
       "power": {

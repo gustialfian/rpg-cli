@@ -3,12 +3,11 @@ const { checkWin } = require('./goal')
 const { parseCommand } = require('./action')
 
 const battle = {
-  turn: 0,
   players: [],
   commands: [],
   logs: [],
   goal: {},
-  status: {}
+  turn: 0,
 }
 
 const history = []
@@ -28,33 +27,9 @@ function calcBattle(battle, commands) {
     return parseCommand(acc, cur)
   }, takeTurn(battle))
 
-  const statusChecked = checkStatus(nextTurn)
-  const winChecked = checkWin(statusChecked)
+  const winChecked = checkWin(nextTurn)
   history.push(winChecked)
   return winChecked
-}
-
-/**
- * check other player status
- * - poison
- * - stun
- * - attack Up
- * 
- * move to status.js
- */
-function checkStatus(battle) {
-  const status = battle.players
-    .filter(v => v.hp <= 0)
-    .reduce((acc, cur) => {
-      return {
-        ...acc,
-        [cur.name]: 'dead'
-      }
-    }, {})
-
-  return produce(battle, draft => {
-    draft.status = status
-  })
 }
 
 function takeTurn(battle) {
