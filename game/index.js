@@ -5,13 +5,12 @@ const { slime, dummy } = require('./enemy')
 const {
   generateBattle,
   calcBattle,
-  getPlayerIndexByName,
   history,
 } = require('./battle')
-const { baseCommand } = require('./action')
-const { initBattle } = require('../test/sample-state')
+const { baseCommand, listAction } = require('./action')
 const { potions } = require('./item')
-const { addItemToInventory, listInventory } = require('./inventory')
+const { addItemToInventory, removeItemInInventory } = require('./inventory')
+const { baseGoal, listGoal } = require('./goal')
 
 
 console.log("hello rpg")
@@ -19,22 +18,23 @@ console.log("hello rpg")
 
 function gameLoop() {
   const goal = {
-    name: 'debug',
+    ...baseGoal,
+    name: listGoal.debug
   }
   const init = generateBattle([jowy, slime], goal)
-
   const commands = [
     {
       ...baseCommand,
-      action: 'attack',
       actor: 1,
+      action: listAction.attack,
       target: 0,
     },
     {
       ...baseCommand,
-      action: 'attack',
       actor: 0,
-      target: 1,
+      action: listAction.use_item,
+      item: 0,
+      target: 0,
     },
   ]
   const nt = calcBattle(init, commands)
@@ -42,3 +42,7 @@ function gameLoop() {
 }
 
 gameLoop()
+
+function dice(n, d) {
+
+}

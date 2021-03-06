@@ -1,4 +1,3 @@
-const { actor } = require('./actor')
 
 const moster = {
   hp: 0,

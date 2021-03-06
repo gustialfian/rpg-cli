@@ -1,8 +1,19 @@
 const { produce } = require('immer')
 
+const listGoal = {
+  kill: 'kill',
+  debug: 'debug',
+}
+
+const baseGoal = {
+  name: listGoal.debug,
+  target: -1,
+  isDone: false,
+}
+
 function checkWin(battle) {
   switch (battle.goal.name) {
-    case 'kill':
+    case listGoal.kill:
       return killGoal(battle)
 
     default:
@@ -11,7 +22,7 @@ function checkWin(battle) {
 }
 
 function killGoal(battle) {
-  const isDead = battle.status[battle.goal.target] == 'dead'
+  const isDead = battle.players[battle.goal.target].status.includes('dead')
 
   const logs = [...battle.logs]
   if (isDead) {
@@ -25,4 +36,6 @@ function killGoal(battle) {
 
 module.exports = {
   checkWin,
+  listGoal,
+  baseGoal,
 }

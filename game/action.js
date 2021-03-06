@@ -1,23 +1,33 @@
 const { produce } = require('immer')
+const { removeItemInInventory } = require('./inventory')
+
+const listAction = {
+  attack: 'attack',
+  wait: 'wait',
+  use_item: 'use_item',
+  skill: 'skill',
+}
 
 const baseCommand = {
-  action: 'wait',
+  actor: -1,
+  action: listAction.wait,
   item: -1,
   skill: -1,
-  actor: -1,
   target: -1,
 }
 
 function parseCommand(battle, command) {
   switch (command.action) {
-    case 'attack':
+    case listAction.attack:
       return attack(battle, command)
-    case 'wait':
+    case listAction.wait:
       return wait(battle, command)
-    case 'use_item':
+    case listAction.use_item:
       return useItem(battle, command)
+    case listAction.skill:
+      return skill(battle, command)
     default:
-      return 'unknown command'
+      return battle
   }
 }
 
@@ -30,12 +40,14 @@ function attack(battle, command) {
   const actor = battle.players[command.actor]
   const target = battle.players[command.target]
   const status = [...target.status]
+  logs.push(`${actor.name} attack ${target.name} for ${actor.atk}`)
 
   // attack logic
   let hp = target.hp - actor.atk
   if (hp <= 0) {
     hp = 0
     status.push('dead')
+    logs.push(`${target.name} is dead`)
   }
 
   const result = {
@@ -44,7 +56,6 @@ function attack(battle, command) {
     status,
   }
 
-  logs.push(`${actor.name} attack ${target.name} for ${actor.atk}`)
   return produce(battle, d => {
     d.players[command.target] = result
     d.logs = logs
@@ -68,11 +79,11 @@ function wait(battle, command) {
 }
 
 function useItem(battle, command) {
-  const item = battle.players[command.actor].inventory[command.item]
-  if (!item) return battle
-
   const actor = battle.players[command.actor]
   const target = battle.players[command.target]
+
+  const item = actor.inventory[command.item]
+  if (!item) return battle
 
   const commands = [...battle.commands]
   commands.push(command)
@@ -81,10 +92,13 @@ function useItem(battle, command) {
   logs.push(`${actor.name} use ${item.name} to ${target.name}`)
 
   const heal = executeHeal(target, item)
-  const result = setStatus(heal, item)
+  const status = setStatus(heal, item)
+
+  const inventory = removeItemInInventory(actor, item)
 
   return produce(battle, d => {
-    d.players[command.target] = result
+    d.players[command.actor] = inventory
+    d.players[command.target] = status
     d.logs = logs
     d.commands = commands
   })
@@ -124,7 +138,12 @@ function heal(target, point) {
   })
 }
 
+function skill(battle, command) {
+  throw Error('not impl yooo')
+}
+
 module.exports = {
   baseCommand,
+  listAction,
   parseCommand,
 }

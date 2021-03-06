@@ -1,8 +1,5 @@
 const {
   actor,
-  calcArmorFromEquipment,
-  calcMelleFromEquipment,
-  calcRangeFromEquipment
 } = require('./actor')
 const {
   armor,
@@ -22,11 +19,8 @@ const jowy = {
   },
   inventory: [
     potions[0],
-    potions[0],
-    potions[1],
-    potions[2],
   ],
-  name: "Jowy"
+  name: "Jowy",
 }
 
 module.exports = {

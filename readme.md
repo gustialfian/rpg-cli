@@ -1,13 +1,15 @@
 # rpg-cli
 
 ## feature
-- [ ] battle between player with specific goal
+- [x] inventory
+- [x] battle between player with specific goal
+- [x] action attack
+- [x] action use item
+- [ ] action skill
+- [ ] equipment system
 - [ ] lots of enemies
-- [ ] item and equipment (stat modifier)
-- [ ] skill
+- [ ] lots of item
+- [ ] lots of equipment
+- [ ] lots of skill
+- [ ] lots of skill
 - [ ] multiplayer
-
-## character
-1. Jowy
-2. Slime
-3. Dummy

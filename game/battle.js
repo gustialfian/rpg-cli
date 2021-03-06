@@ -18,11 +18,14 @@ function generateBattle(players, goal) {
     players,
     goal,
   }
-  history.push(initBattle)
+  history.push(JSON.stringify(initBattle))
   return initBattle
 }
 
 function calcBattle(battle, commands) {
+  // filter duplicate command from same actor
+  // and pick the first one
+  // sorting maybe helps
   const nextTurn = commands.reduce((acc, cur) => {
     return parseCommand(acc, cur)
   }, takeTurn(battle))
@@ -41,13 +44,8 @@ function takeTurn(battle) {
   }
 }
 
-function getPlayerIndexByName(battle, name) {
-  return battle.players.findIndex(v => v.name == name)
-}
-
 module.exports = {
   generateBattle,
   calcBattle,
-  getPlayerIndexByName,
   history,
 }

@@ -2,6 +2,7 @@
 const actor = {
   hp: 0,
   maxHp: 0,
+  atk: 0,
 
   /**
    * right now equipment do nothing for character 
@@ -10,6 +11,7 @@ const actor = {
   equipment: {},
 
   inventory: [],
+  skill: [],
   status: [],
 
   name: 'base actor',

@@ -3,9 +3,10 @@ const item = {
   range: 0,
   armor: 0,
   heal: 0,
-  modifiers: [],
   addStatus: [],
   removeStatus: [],
+  stack: 0,
+  name: 'base item',
 }
 
 const armor = [
