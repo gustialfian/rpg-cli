@@ -18,10 +18,10 @@ const baseCommand = {
 
 function parseCommand(battle, command) {
   switch (command.action) {
-    case listAction.attack:
-      return attack(battle, command)
     case listAction.wait:
       return wait(battle, command)
+    case listAction.attack:
+      return attack(battle, command)
     case listAction.use_item:
       return useItem(battle, command)
     case listAction.skill:
@@ -31,29 +31,30 @@ function parseCommand(battle, command) {
   }
 }
 
+function wait(battle, command) {
+  const actor = battle.players[command.actor]
+
+  const commands = [...battle.commands, command]
+  const logs = [...battle.logs, `${actor.name} waiting`]
+
+  return produce(battle, d => {
+    d.logs = logs
+    d.commands = commands
+  })
+}
+
 function attack(battle, command) {
-  const commands = [...battle.commands]
-  commands.push(command)
-
-  const logs = [...battle.logs]
-
   const actor = battle.players[command.actor]
   const target = battle.players[command.target]
   const status = [...target.status]
-  logs.push(`${actor.name} attack ${target.name} for ${actor.atk}`)
 
-  // attack logic
-  let hp = target.hp - actor.atk
-  if (hp <= 0) {
-    hp = 0
+  const commands = [...battle.commands, command]
+  const logs = [...battle.logs, `${actor.name} attack ${target.name} for ${actor.atk}`]
+
+  const result = hit(target, actor.atk)
+  if (result.hp <= 0) {
     status.push('dead')
     logs.push(`${target.name} is dead`)
-  }
-
-  const result = {
-    ...target,
-    hp,
-    status,
   }
 
   return produce(battle, d => {
@@ -63,66 +64,89 @@ function attack(battle, command) {
   })
 }
 
-function wait(battle, command) {
-  const actor = battle.players[command.actor]
-
-  const commands = [...battle.commands]
-  commands.push(command)
-
-  const logs = [...battle.logs]
-  logs.push(`${actor.name} waiting`)
-
-  return produce(battle, d => {
-    d.logs = logs
-    d.commands = commands
-  })
-}
-
 function useItem(battle, command) {
   const actor = battle.players[command.actor]
   const target = battle.players[command.target]
-
   const item = actor.inventory[command.item]
+
   if (!item) return battle
 
-  const commands = [...battle.commands]
-  commands.push(command)
+  const commands = [...battle.commands, command]
+  const logs = [...battle.logs, `${actor.name} use ${item.name} to ${target.name}`]
 
-  const logs = [...battle.logs]
-  logs.push(`${actor.name} use ${item.name} to ${target.name}`)
-
-  const heal = executeHeal(target, item)
-  const status = setStatus(heal, item)
-
-  const inventory = removeItemInInventory(actor, item)
+  const result = execute(target, item)
+  const actorInventory = command.actor == command.target ? result : actor
+  const actorAfterUse = removeItemInInventory(actorInventory, item)
 
   return produce(battle, d => {
-    d.players[command.actor] = inventory
-    d.players[command.target] = status
-    d.logs = logs
+    d.players[command.target] = result
+    d.players[command.actor] = actorAfterUse
     d.commands = commands
+    d.logs = logs
   })
 }
 
-function executeHeal(target, item) {
-  if (item.heal == 0) return target
-  return heal(target, item.heal)
+function skill(battle, command) {
+  const actor = battle.players[command.actor]
+  const target = battle.players[command.target]
+  const skill = actor.skill[command.skill]
+
+  const commands = [...battle.commands, command]
+  const logs = [...battle.logs, `${actor.name} cast ${skill.name} to ${target.name}`]
+
+  if (actor.mp < skill.cost) {
+    logs.push(`${actor.name} mp not enough`)
+    return {
+      ...battle,
+      commands,
+      logs,
+    }
+  }
+
+  const result = execute(target, skill)
+  const actorMp = command.actor == command.target ? result : actor
+  const actorAfterCast = useMp(actorMp, skill.cost)
+
+  return produce(battle, d => {
+    d.players[command.target] = result
+    d.players[command.actor] = actorAfterCast
+    d.commands = commands
+    d.logs = logs
+  })
 }
 
-function setStatus(target, item) {
-  return removeStatus(addStatus(target, item), item)
+function execute(target, item) {
+  return pipe(
+    (t) => executeHeal(t, item),
+    (t) => executeHit(t, item),
+    (t) => setStatus(t, item),
+  )(target)
 }
 
-function addStatus(target, item) {
-  const status = new Set([...target.status, ...item.addStatus])
+function executeHeal(target, healer) {
+  if (healer.heal <= 0) return target
+  return heal(target, healer.heal)
+}
+
+function executeHit(target, attacker) {
+  if (attacker.atk <= 0) return target
+  return hit(target, attacker.atk)
+}
+
+function setStatus(target, statuser) {
+  return removeStatus(addStatus(target, statuser), statuser)
+}
+
+function addStatus(target, statuser) {
+  const status = new Set([...target.status, ...statuser.addStatus])
   return produce(target, d => {
     d.status = [...status]
   })
 }
 
-function removeStatus(target, item) {
+function removeStatus(target, statuser) {
   const status = new Set(target.status)
-  item.removeStatus.forEach(v => {
+  statuser.removeStatus.forEach(v => {
     status.delete(v)
   });
   return produce(target, d => {
@@ -130,16 +154,33 @@ function removeStatus(target, item) {
   })
 }
 
-function heal(target, point) {
-  const hp = target.hp + point
-  const normalizeHP = hp > target.maxHp ? target.maxHp : hp
+function hit(target, point) {
+  const hp = target.hp - point
+  const normalizeHP = hp <= 0 ? 0 : hp
   return produce(target, d => {
     d.hp = normalizeHP
   })
 }
 
-function skill(battle, command) {
-  throw Error('not impl yooo')
+function heal(target, point) {
+  const hp = target.hp + point
+  const normalizeHp = hp > target.maxHp ? target.maxHp : hp
+  return produce(target, d => {
+    d.hp = normalizeHp
+  })
+}
+
+function useMp(player, point) {
+  const mp = player.mp - point
+  const normalizeMp = mp <= 0 ? 0 : mp
+  return produce(player, d => {
+    d.mp = normalizeMp
+  })
+}
+
+function pipe(...fns) {
+  return v => fns
+    .reduce((val, fn) => fn(val), v)
 }
 
 module.exports = {

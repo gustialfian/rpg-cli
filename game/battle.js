@@ -10,7 +10,6 @@ const battle = {
   turn: 0,
 }
 
-const history = []
 
 function generateBattle(players, goal) {
   const initBattle = {
@@ -18,7 +17,6 @@ function generateBattle(players, goal) {
     players,
     goal,
   }
-  history.push(JSON.stringify(initBattle))
   return initBattle
 }
 
@@ -31,7 +29,6 @@ function calcBattle(battle, commands) {
   }, takeTurn(battle))
 
   const winChecked = checkWin(nextTurn)
-  history.push(winChecked)
   return winChecked
 }
 
@@ -47,5 +44,4 @@ function takeTurn(battle) {
 module.exports = {
   generateBattle,
   calcBattle,
-  history,
 }

@@ -3,7 +3,7 @@ const { produce } = require('immer')
 /**
  * check other player status
  * - poison
- * - stun
+ * - fire
  * - attack Up
  *
  * move to status.js

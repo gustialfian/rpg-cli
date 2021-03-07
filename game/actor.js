@@ -2,6 +2,8 @@
 const actor = {
   hp: 0,
   maxHp: 0,
+  mp: 0,
+  maxMp: 0,
   atk: 0,
 
   /**

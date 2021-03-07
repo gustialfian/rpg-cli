@@ -1,7 +1,6 @@
 const item = {
-  melle: 0,
-  range: 0,
-  armor: 0,
+  atk: 0,
+  def: 0,
   heal: 0,
   addStatus: [],
   removeStatus: [],
@@ -12,17 +11,17 @@ const item = {
 const armor = [
   {
     ...item,
-    armor: 11,
+    def: 11,
     name: 'light armor',
   },
   {
     ...item,
-    armor: 12,
+    def: 12,
     name: 'medium armor',
   },
   {
     ...item,
-    armor: 14,
+    def: 14,
     name: 'heavy armor',
   },
 ]
@@ -30,23 +29,23 @@ const armor = [
 const weapon = [
   {
     ...item,
-    melle: 4,
+    atk: 4,
     name: 'Dagger',
   },
   {
     ...item,
-    melle: 6,
+    atk: 6,
     name: 'Short Sword',
   },
   {
     ...item,
-    range: 8,
+    atk: 8,
     name: 'Longbow',
   },
   {
     ...item,
-    melle: 6,
-    armor: 2,
+    atk: 6,
+    def: 2,
     name: 'shield',
   },
 ]
