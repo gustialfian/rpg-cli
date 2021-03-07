@@ -44,9 +44,14 @@ const weapon = [
   },
   {
     ...item,
-    atk: 6,
+    atk: 3,
     def: 2,
-    name: 'shield',
+    name: 'Sword & Shield',
+  },
+  {
+    ...item,
+    atk: 5,
+    name: 'Tonfas'
   },
 ]
 

@@ -2,7 +2,7 @@
 
 ## feature
 - [x] actor
-  - [ ] generation
+  - [x] generation
   - [x] inventory
 - [x] battle
   - [x] goal
@@ -22,6 +22,8 @@
   - [ ] lots of equipment
   - [ ] lots of status
 
+## tools
+- parcel bundle game for web
 
 ## skill
 - fft 

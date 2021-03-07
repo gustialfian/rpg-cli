@@ -37,27 +37,6 @@ const skill = [
   },
 ]
 
-function addSkill(player, skill) {
-  let ps = [...player.skill]
-  if (isSkillExists(player, skill)) {
-    return player
-  }
-  ps.push(skill)
-  return produce(player, d => {
-    d.skill = ps
-  })
-}
-
-function isSkillExists(player, skill) {
-  const names = listSkill(player)
-  return names.includes(skill.name)
-}
-
-function listSkill(player) {
-  return player.skill.map(v => v.name)
-}
-
 module.exports = {
   skill,
-  addSkill,
 }

@@ -1,40 +1,3 @@
-const { produce } = require('immer')
-
-function addItemToInventory(player, item) {
-  let inventory = [...player.inventory]
-  if (!isItemExists(player, item)) {
-    inventory.push(item)
-  }
-  inventory = incStack(inventory, item)
-  return produce(player, d => {
-    d.inventory = inventory
-  })
-}
-
-function removeItemInInventory(player, item) {
-  let inventory = [...player.inventory]
-  if (!isItemExists(player, item)) {
-    return player
-  }
-  inventory = decStack(inventory, item)
-  inventory = cleanUp(inventory)
-  return produce(player, d => {
-    d.inventory = inventory
-  })
-}
-
-function listInventory(player) {
-  return player.inventory.map(v => v.name)
-}
-
-function isItemExists(player, item) {
-  const names = listInventory(player)
-  return names.includes(item.name)
-}
-
-function findIndexItem(inventory, item) {
-  return inventory.findIndex(v => v.name == item.name)
-}
 
 function incStack(inventory, item) {
   const idx = findIndexItem(inventory, item)
@@ -69,8 +32,12 @@ function cleanUp(inventory) {
   return res
 }
 
+function findIndexItem(inventory, item) {
+  return inventory.findIndex(v => v.name == item.name)
+}
+
 module.exports = {
-  listInventory,
-  addItemToInventory,
-  removeItemInInventory,
+  incStack,
+  decStack,
+  cleanUp,
 }
