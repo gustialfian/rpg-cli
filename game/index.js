@@ -13,14 +13,25 @@ const { initActor, setMaxStat, setEquipment, addSkill, addItemToInventory } = re
 console.log("hello rpg")
 
 function gameLoop() {
-  // character creation
-  let res = initActor('riou')
-  res = setMaxStat(res, { maxHp: 30, maxMp: 15 })
-  res = setEquipment(res, { weapon: weapon[4], armor: armor[0] })
-  res = addSkill(res, skill[0])
-  res = addItemToInventory(res, potions[0])
+  const goal = {
+    ...baseGoal,
+    name: listGoal.debug
+  }
+  const t0 = generateBattle([addItemToInventory(jowy, potions[1]), slime], goal)
 
-  console.log(res)
+  const t1 = calcBattle(t0, [
+    {
+      ...baseCommand,
+      actor: 0,
+      action: listAction.skill,
+      skill: 2,
+      target: 0,
+    },
+  ])
+
+  console.log(t0.players[0].status)
+  console.log(t1.players[0].status)
+  console.log(t1.logs)
 }
 
 gameLoop()

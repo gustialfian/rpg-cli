@@ -9,7 +9,7 @@
   - [x] action attack
   - [x] action use item
   - [x] action skill
-  - [ ] equipment system
+  - [x] equipment system
   - [ ] status modifier system
   - [ ] rng
   - [ ] cli ui

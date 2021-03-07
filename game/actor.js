@@ -15,10 +15,6 @@ const actor = {
   atk: 0,
   def: 0,
 
-  /**
-   * right now equipment do nothing for character 
-   * - design and impl it
-   */
   equipment: {},
 
   inventory: [],
@@ -65,7 +61,6 @@ function setEquipment(player, equipment) {
 
 // skill
 function addSkill(player, skill) {
-  console.log(`hai`)
   if (isSKillSlotFull(player)) {
     return player
   }
@@ -82,8 +77,7 @@ function addSkill(player, skill) {
 }
 
 function isSkillExists(player, skill) {
-  const names = listSkill(player)
-  return names.includes(skill.name)
+  return listSkill(player).includes(skill.name)
 }
 
 function isSKillSlotFull(player) {
@@ -118,13 +112,13 @@ function removeItemInInventory(player, item) {
   })
 }
 
-function listInventory(player) {
-  return player.inventory.map(v => v.name)
-}
-
 function isItemExists(player, item) {
   const names = listInventory(player)
   return names.includes(item.name)
+}
+
+function listInventory(player) {
+  return player.inventory.map(v => v.name)
 }
 
 
