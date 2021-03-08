@@ -24,6 +24,7 @@
 
 ## tools
 - parcel bundle game for web
+- Object.freeze(val)
 
 ## skill
 - fft 

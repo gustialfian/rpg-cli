@@ -1,29 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import { weapon, armor, potions } from "../game/item";
-import { skill } from "../game/skill";
-
-import {
-  initActor,
-  setMaxStat,
-  setEquipment,
-  addSkill,
-  addItemToInventory
-} from "../game/actor";
+import Battle from "./component/Battle";
+import Player from "./component/Player";
 
 function App() {
-  let res = initActor('riou')
-  res = setMaxStat(res, { maxHp: 30, maxMp: 30 })
-  res = setEquipment(res, { weapon: weapon[4], armor: armor[0] })
-  res = addSkill(res, skill[0])
-  res = addItemToInventory(res, potions[0])
-  console.log(res)
   return (
-    <>
-      <h1>Hello RPG</h1>
-      <pre>{JSON.stringify(res, null, '\t')}</pre>
-    </>
+    <div className="flex flex-col h-screen p-4">
+      <header className="mb-4 p-4 border-2 border-white rounded">
+        <h1 className="font-bold text-2xl text-bold">Simple RPG</h1>
+      </header>
+      {/* <Player /> */}
+      <Battle />
+    </div>
   )
 }
 

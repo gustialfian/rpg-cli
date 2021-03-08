@@ -1,5 +1,5 @@
 const { produce } = require('immer')
-const { removeItemInInventory } = require('./inventory')
+const { removeItemInInventory } = require('./actor')
 
 const listAction = {
   attack: 'attack',
@@ -10,7 +10,7 @@ const listAction = {
 
 const baseCommand = {
   actor: -1,
-  action: listAction.wait,
+  action: '',
   item: -1,
   skill: -1,
   target: -1,

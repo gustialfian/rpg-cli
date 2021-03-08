@@ -19,6 +19,9 @@ const jowy = {
     armor: armor[1],
     weapon: weapon[3],
   },
+  inventory: [
+    potions[1],
+  ],
   skillSlot: 4,
   skill: [
     skill[0],
