@@ -17,8 +17,6 @@ const goal = {
   name: listGoal.debug
 }
 
-const init = generateBattle([jowy, dummy], goal)
-
 function useBattle(players, goal) {
   const [battle, setTurn] = useState(generateBattle(players, goal))
   const nextTurn = (command) => {
@@ -45,7 +43,6 @@ function Battle() {
 
   useEffect(_ => {
     document.addEventListener("keyup", event => {
-      console.log(menu, event.code)
       // attack
       if (menu == 'action' && event.code == 'KeyA') handleMenuChange('target', 'action', listAction.attack)
       // skill
@@ -71,7 +68,6 @@ function Battle() {
     })
   }
 
-  // console.log(turn)
   return <div className="p-4 bg-gray-800">
     <h1 className="mb-4 font-semibold text-lg">Goal: {battle.goal.name} | Turn: {battle.turn}</h1>
     <div className="grid grid-flow-row grid-cols-2 grid-rows-2 gap-2">
@@ -90,7 +86,6 @@ function Battle() {
       </div>
       <div className="px-2 py-4 border border-white rounded col-span-2 flex flex-wrap h-24">
         <ActionMenu open={menu} turn={battle} actor={actor} onMenuChange={handleMenuChange} />
-
       </div>
     </div>
   </div>
